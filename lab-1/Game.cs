@@ -40,8 +40,6 @@ namespace lab_1
             while (true)
             {
                 PrintGame();
-                Console.WriteLine(FirstMovePlayer.GetHashCode().ToString());
-                Console.WriteLine(CurrentPlayer.GetHashCode().ToString());
                 if (CheckRoundEnd())
                 {
                     if (PrintAskMessage("Do you want to play again? (y/n)") == "y")
