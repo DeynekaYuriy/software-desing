@@ -13,27 +13,27 @@ namespace lab_1
     public class Game
     {
         private GameBoard _gameBoard;
-        private Player player1;
-        private Player player2;
-        private char? lastWinnerChar;
-        private Player CurrentPlayer;
-        private Player FirstMovePlayer;
+        private readonly Player _player1;
+        private readonly Player _player2;
+        private char? _lastWinnerChar;
+        private Player _currentPlayer;
+        private Player _firstMovePlayer;
         public Game()
         {
             _gameBoard = new GameBoard();
-            player1 = new Player("Player 1", 'X', 0);
-            player2 = new Player("Player 2", 'O', 0);
-            CurrentPlayer = player1;
-            FirstMovePlayer = player1;
+            _player1 = new Player("Player 1", 'X', 0);
+            _player2 = new Player("Player 2", 'O', 0);
+            _currentPlayer = _player1;
+            _firstMovePlayer = _player1;
         }
         private void SwitchCurrentPlayer()
         {
-            CurrentPlayer = CurrentPlayer == player1 ? player2 : player1;
+            _currentPlayer = _currentPlayer == _player1 ? _player2 : _player1;
         }
         private void SwitchFirstMovePlayer()
         {
-            FirstMovePlayer = FirstMovePlayer == player1 ? player2 : player1;
-            CurrentPlayer = FirstMovePlayer;
+            _firstMovePlayer = _firstMovePlayer == _player1 ? _player2 : _player1;
+            _currentPlayer = _firstMovePlayer;
         }
         public void Run()
         {
@@ -75,7 +75,7 @@ namespace lab_1
         {
             if (IsWin())
             {
-                Player winner = lastWinnerChar == player1.PlayerChar ? player1 : player2;
+                Player winner = _lastWinnerChar == _player1.PlayerChar ? _player1 : _player2;
                 winner.Score++;
                 PrintGreenMessage($"{winner.Name} wins");
                 SwitchFirstMovePlayer();
@@ -108,19 +108,19 @@ namespace lab_1
             int i = 1;
             if (board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2])
             {
-                lastWinnerChar = board[0, 0];
+                _lastWinnerChar = board[0, 0];
                 return true;
             }
             if (board[0, 2] == board[1, 1] && board[1, 1] == board[2, 0])
             {
-                lastWinnerChar = board[0, 2];
+                _lastWinnerChar = board[0, 2];
                 return true;
             }
             for (i = 0; i < board.GetLength(0); i++)
             {
                 if (board[i, 0] == board[i, 1] && board[i, 1] == board[i, 2])
                 {
-                    lastWinnerChar = board[i, 0];
+                    _lastWinnerChar = board[i, 0];
                     return true;
                 }
             }
@@ -128,7 +128,7 @@ namespace lab_1
             {
                 if (board[0, i] == board[1, i] && board[1, i] == board[2, i])
                 {
-                    lastWinnerChar = board[i, 0];
+                    _lastWinnerChar = board[0, i];
                     return true;
                 }
             }
@@ -144,7 +144,7 @@ namespace lab_1
 
             if (position <= 9 && position >= 1)
             {
-                _gameBoard.SetCharAt(position, CurrentPlayer.PlayerChar);
+                _gameBoard.SetCharAt(position, _currentPlayer.PlayerChar);
                 SwitchCurrentPlayer();
             }
             else
@@ -157,14 +157,14 @@ namespace lab_1
         {
             Console.Clear();
             PrintScore();
-            Console.WriteLine($"\n{CurrentPlayer.Name} turn. Select from 1 to 9 from the game board.\n");
+            Console.WriteLine($"\n{_currentPlayer.Name} turn. Select from 1 to 9 from the game board.\n");
             _gameBoard.PrintBoard();
             Console.WriteLine("\n");
         }
         public void PrintScore()
         {
-            Console.WriteLine($"{player1.Name}: {player1.PlayerChar} [{player1.Score}]");
-            Console.WriteLine($"{player2.Name}: {player2.PlayerChar} [{player2.Score}]");
+            Console.WriteLine($"{_player1.Name}: {_player1.PlayerChar} [{_player1.Score}]");
+            Console.WriteLine($"{_player2.Name}: {_player2.PlayerChar} [{_player2.Score}]");
         }
         public void PrintGreenMessage(string message)
         {
