@@ -1,4 +1,5 @@
-﻿using System;
+﻿using lab_5.LightHTML.Observer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace lab_5.LightHTML
             NodeType = nodeType;
             ClosureType = closureType;
             CssClasses = cssClasses;
+            Events = new EventManager(this);
         }
         public override string OuterHTML()
         {
