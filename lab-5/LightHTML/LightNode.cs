@@ -21,6 +21,13 @@ namespace lab_5.LightHTML
     {
         public string Tag { get; set; }
         public EventManager Events { get; set; }
+        private void Lifecycle()
+        {
+            OnCreated();
+            OnInserted(); 
+            OnRemoved();
+            OnStylesApplied();
+        }
         abstract public string InnerHTML();
         abstract public string OuterHTML();
         abstract public LightNode Clone();
