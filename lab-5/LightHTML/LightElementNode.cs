@@ -1,4 +1,5 @@
-﻿using System;
+﻿using lab_5.LightHTML.Iterator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,6 @@ namespace lab_5.LightHTML
 {
     public class LightElementNode : LightNode
     {
-        private List<LightNode> children = new List<LightNode>();
         public NodeType NodeType { get; }
         public ClosureType ClosureType { get; }
         public List<string> CssClasses { get; set; }
@@ -20,6 +20,7 @@ namespace lab_5.LightHTML
             ClosureType = closureType;
             CssClasses = cssClasses;
         }
+
         public override string OuterHTML()
         {
             StringBuilder sb = new StringBuilder($"<{Tag} ");
@@ -35,9 +36,15 @@ namespace lab_5.LightHTML
             }
             else
             {
-
-                sb.AppendLine(">");
-                sb.AppendLine(InnerHTML());
+                if (Children.GetItems().Count > 0)
+                {
+                    sb.AppendLine(">");
+                }
+                else
+                {
+                    sb.Append(">");
+                }
+                sb.Append(InnerHTML());
                 sb.Append($"</{Tag}>");
 
             }
@@ -48,7 +55,7 @@ namespace lab_5.LightHTML
 
             StringBuilder sb = new StringBuilder();
 
-            foreach (var c in children)
+            foreach (var c in Children)
             {
                 sb.AppendLine($"\t{c.OuterHTML()}");
             }
@@ -56,38 +63,38 @@ namespace lab_5.LightHTML
         }
         public void AppendChild(LightNode node)
         {
-            children.Add(node);
+            Children.AddItem(node);
         }
         public void ReplaceChild(LightNode oldNode, LightNode newNode)
         {
-            var index = children.IndexOf(oldNode);
+            var index = Children.GetItems().IndexOf(oldNode);
             if (index != -1)
             {
-                children[index] = newNode;
+                Children.GetItems()[index] = newNode;
             }
         }
         public void RemoveChild(LightNode node)
         {
-            var index = children.IndexOf(node);
+            var index = Children.GetItems().IndexOf(node);
             if (index != -1)
             {
-                children.RemoveAt(index);
+                Children.GetItems().RemoveAt(index);
             }
         }
         public void InsertBefore(LightNode node, LightNode newNode)
         {
-            var index = children.IndexOf(node);
+            var index = Children.GetItems().IndexOf(node);
             if (index != -1)
             {
-                children.Insert(index, newNode);
+                Children.GetItems().Insert(index, newNode);
             }
         }
         public override LightNode Clone()
         {
             var clone = new LightElementNode(Tag, NodeType, ClosureType, new(CssClasses));
-            foreach (var c in children)
+            foreach (var c in Children)
             {
-                clone.children.Add(c.Clone());
+                clone.Children.AddItem(c.Clone());
             }
             return clone;
         }

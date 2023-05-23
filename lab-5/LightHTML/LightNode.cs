@@ -1,4 +1,5 @@
-﻿using System;
+﻿using lab_5.LightHTML.Iterator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace lab_5.LightHTML
     }
     abstract public class LightNode
     {
+        public NodesCollection Children = new NodesCollection();
         public string Tag { get; set; }
         abstract public string InnerHTML();
         abstract public string OuterHTML();
