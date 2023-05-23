@@ -1,4 +1,5 @@
-﻿using System;
+﻿using lab_5.LightHTML.Memento;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -31,9 +32,28 @@ namespace lab_5.LightHTML
             return $"<{Tag}>{Text}</{Tag}>";
         }
 
-        public override LightNode Clone()
+        public override LightTextNode Clone()
         {
             return new LightTextNode(Tag, Text);
+        }
+
+        public override INodeMemento Save()
+        {
+            return new TextNodeMemento(Clone());
+        }
+
+        public override void Restore(INodeMemento memento)
+        {
+            if (memento is LightTextNode)
+            {
+                var node = (LightTextNode)memento.GetState();
+                Tag = node.Tag;
+                Text = node.Text;
+            }
+            else
+            {
+                throw new Exception("Unknown memento class");
+            }
         }
     }
 }
