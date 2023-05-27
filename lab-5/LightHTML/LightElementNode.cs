@@ -1,4 +1,5 @@
-﻿using System;
+﻿using lab_5.LightHTML.Visitor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,13 +14,19 @@ namespace lab_5.LightHTML
         public ClosureType ClosureType { get; }
         public List<string> CssClasses { get; set; }
         public int ChildCount => 0;
-        public LightElementNode(string tag, NodeType nodeType, ClosureType closureType, List<string> cssClasses)
+        public LightElementNode(string tag, NodeType nodeType, ClosureType closureType, List<string> cssClasses = null)
         {
+            if (cssClasses == null)
+            {
+                cssClasses = new List<string>();
+            }
             Tag = tag;
             NodeType = nodeType;
             ClosureType = closureType;
             CssClasses = cssClasses;
         }
+        public List<LightNode> GetChildren() => children;
+
         public override string OuterHTML()
         {
             StringBuilder sb = new StringBuilder($"<{Tag} ");
@@ -90,6 +97,11 @@ namespace lab_5.LightHTML
                 clone.children.Add(c.Clone());
             }
             return clone;
+        }
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

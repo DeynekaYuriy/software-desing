@@ -1,4 +1,5 @@
-﻿using System;
+﻿using lab_5.LightHTML.Visitor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -34,6 +35,11 @@ namespace lab_5.LightHTML
         public override LightNode Clone()
         {
             return new LightTextNode(Tag, Text);
+        }
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }
