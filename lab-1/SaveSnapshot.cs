@@ -16,5 +16,6 @@ namespace lab_1
         public string PlayerName2;
         public int PlayerScore1;
         public int PlayerScore2;
+        public bool WithBot;
     }
 }

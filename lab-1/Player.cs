@@ -17,5 +17,9 @@ namespace lab_1
             PlayerChar = playerChar;
             Score = score;
         }
+        public virtual string Input(char[,] board)
+        {
+            return Console.ReadLine();
+        }
     }
 }

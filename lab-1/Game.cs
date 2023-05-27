@@ -27,9 +27,17 @@ namespace lab_1
                 LoadGame();
                 return;
             }
+            if (PrintAskMessage("Do you want to play with bot? (y/n)") == "y")
+            {
+                _player2 = new BotPlayer("Bot", 'O', 0);
+            }
+            else
+            {
+                _player2 = new Player("Player 2", 'O', 0);
+
+            }
             _gameBoard = new GameBoard();
             _player1 = new Player("Player 1", 'X', 0);
-            _player2 = new Player("Player 2", 'O', 0);
             _currentPlayer = _player1;
             _firstMovePlayer = _player1;
         }
@@ -52,7 +60,15 @@ namespace lab_1
             }
             _gameBoard = new GameBoard(snapshot.Board);
             _player1 = new Player(snapshot.PlayerName1, snapshot.PlayerChar1, snapshot.PlayerScore1);
-            _player2 = new Player(snapshot.PlayerName2, snapshot.PlayerChar2, snapshot.PlayerScore2);
+            if (snapshot.WithBot)
+            {
+                _player2 = new BotPlayer(snapshot.PlayerName2, snapshot.PlayerChar2, snapshot.PlayerScore2);
+
+            }
+            else
+            {
+                _player2 = new Player(snapshot.PlayerName2, snapshot.PlayerChar2, snapshot.PlayerScore2);
+            }
             if (snapshot.CurrentPlayer == 1)
             {
                 _currentPlayer = _player1;
@@ -75,6 +91,7 @@ namespace lab_1
                 PlayerName2 = _player2.Name,
                 PlayerScore1 = _player1.Score,
                 PlayerScore2 = _player2.Score,
+                WithBot = _player2 is BotPlayer ? true : false
             };
             _saver.Save(snapshot);
             Console.WriteLine("Game Saved");
@@ -106,7 +123,7 @@ namespace lab_1
         }
         private void Input()
         {
-            string input = Console.ReadLine();
+            string input = _currentPlayer.Input(_gameBoard.Board);
             if (input == "u")
             {
                 UndoMove();
@@ -135,6 +152,7 @@ namespace lab_1
             {
                 PrintGreenMessage("It's a draw");
                 SwitchFirstMovePlayer();
+                _gameBoard = new GameBoard();
                 return true;
             }
             return false;
