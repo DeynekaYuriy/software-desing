@@ -12,11 +12,14 @@ namespace lab_1
     public class GameBoard
     {
         public char[,] Board { get; private set; }
-        private Stack<int> movesStack;
+        private Stack<int> movesStack = new Stack<int>();
         public GameBoard()
         {
             Board = new char[,] { { '1', '2', '3' }, { '4', '5', '6' }, { '7', '8', '9' } };
-            movesStack = new Stack<int>();
+        }
+        public GameBoard(char[,] board)
+        {
+            Board = board;
         }
         public void SetCharAt(int position, char c)
         {
@@ -53,7 +56,7 @@ namespace lab_1
         }
         public void UndoMove()
         {
-            if(movesStack.Count == 0)
+            if (movesStack.Count == 0)
             {
                 throw new Exception("The moves list is empty");
             }
