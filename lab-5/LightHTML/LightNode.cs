@@ -1,4 +1,5 @@
-﻿using System;
+﻿using lab_5.LightHTML.Visitor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,5 +23,6 @@ namespace lab_5.LightHTML
         abstract public string InnerHTML();
         abstract public string OuterHTML();
         abstract public LightNode Clone();
+        abstract public void Accept(INodeVisitor visitor);
     }
 }
