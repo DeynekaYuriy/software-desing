@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace lab_1
@@ -13,13 +14,19 @@ namespace lab_1
     public class Game
     {
         private GameBoard _gameBoard;
-        private readonly Player _player1;
-        private readonly Player _player2;
+        private Player _player1;
+        private Player _player2;
         private char? _lastWinnerChar;
         private Player _currentPlayer;
         private Player _firstMovePlayer;
+        IGameSaver _saver = new JsonSaver();
         public Game()
         {
+            if (PrintAskMessage("Do you want to load game? (y/n)") == "y")
+            {
+                LoadGame();
+                return;
+            }
             _gameBoard = new GameBoard();
             _player1 = new Player("Player 1", 'X', 0);
             _player2 = new Player("Player 2", 'O', 0);
@@ -34,6 +41,44 @@ namespace lab_1
         {
             _firstMovePlayer = _firstMovePlayer == _player1 ? _player2 : _player1;
             _currentPlayer = _firstMovePlayer;
+        }
+        public void LoadGame()
+        {
+            var snapshot = _saver.Load();
+            if (snapshot == null)
+            {
+                Console.WriteLine("No saved game");
+                return;
+            }
+            _gameBoard = new GameBoard(snapshot.Board);
+            _player1 = new Player(snapshot.PlayerName1, snapshot.PlayerChar1, snapshot.PlayerScore1);
+            _player2 = new Player(snapshot.PlayerName2, snapshot.PlayerChar2, snapshot.PlayerScore2);
+            if (snapshot.CurrentPlayer == 1)
+            {
+                _currentPlayer = _player1;
+            }
+            else
+            {
+                _currentPlayer = _player2;
+            }
+            _firstMovePlayer = _currentPlayer;
+        }
+        public void SaveGame()
+        {
+            var snapshot = new SaveSnapshot()
+            {
+                Board = _gameBoard.Board,
+                CurrentPlayer = _currentPlayer == _player1 ? 1 : 2,
+                PlayerChar1 = _player1.PlayerChar,
+                PlayerChar2 = _player2.PlayerChar,
+                PlayerName1 = _player1.Name,
+                PlayerName2 = _player2.Name,
+                PlayerScore1 = _player1.Score,
+                PlayerScore2 = _player2.Score,
+            };
+            _saver.Save(snapshot);
+            Console.WriteLine("Game Saved");
+            Console.ReadLine();
         }
         public void Run()
         {
@@ -65,6 +110,10 @@ namespace lab_1
             if (input == "u")
             {
                 UndoMove();
+            }
+            if (input == "s")
+            {
+                SaveGame();
             }
             else
             {
@@ -188,6 +237,7 @@ namespace lab_1
         }
         public void EndGame()
         {
+
             Console.Clear();
             Console.WriteLine("Game over");
             PrintScore();
