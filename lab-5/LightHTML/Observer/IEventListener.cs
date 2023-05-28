@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace lab_4.Bridge
+namespace lab_5.LightHTML.Observer
 {
-    public interface IRender
+    public interface IEventListener
     {
-        public string Render(Shape shape);
+        public void Update(LightNode node);
     }
 }
