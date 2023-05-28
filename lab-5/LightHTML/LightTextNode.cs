@@ -14,6 +14,7 @@ namespace lab_5.LightHTML
         {
             Tag = tag;
             Text = text;
+            Lifecycle();
         }
         public LightTextNode(string tag)
         {
@@ -34,6 +35,14 @@ namespace lab_5.LightHTML
         public override LightNode Clone()
         {
             return new LightTextNode(Tag, Text);
+        }
+        public override void OnCreated()
+        {
+            Console.WriteLine("Text node created");
+        }
+        public override void OnInserted()
+        {
+            Console.WriteLine("Text node inserted");
         }
     }
 }

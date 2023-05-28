@@ -19,6 +19,7 @@ namespace lab_5.LightHTML
             NodeType = nodeType;
             ClosureType = closureType;
             CssClasses = cssClasses;
+            Lifecycle();
         }
         public override string OuterHTML()
         {
