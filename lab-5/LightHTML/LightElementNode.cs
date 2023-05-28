@@ -1,16 +1,18 @@
-﻿using System;
+﻿using lab_5.LightHTML.Memento;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace lab_5.LightHTML
 {
     public class LightElementNode : LightNode
     {
         private List<LightNode> children = new List<LightNode>();
-        public NodeType NodeType { get; }
-        public ClosureType ClosureType { get; }
+        public NodeType NodeType { get; set; }
+        public ClosureType ClosureType { get; set; }
         public List<string> CssClasses { get; set; }
         public int ChildCount => 0;
         public LightElementNode(string tag, NodeType nodeType, ClosureType closureType, List<string> cssClasses)
@@ -82,7 +84,7 @@ namespace lab_5.LightHTML
                 children.Insert(index, newNode);
             }
         }
-        public override LightNode Clone()
+        public override LightElementNode Clone()
         {
             var clone = new LightElementNode(Tag, NodeType, ClosureType, new(CssClasses));
             foreach (var c in children)
@@ -90,6 +92,27 @@ namespace lab_5.LightHTML
                 clone.children.Add(c.Clone());
             }
             return clone;
+        }
+        public override INodeMemento Save()
+        {
+            return new ElementNodeMemento(Clone());
+        }
+
+        public override void Restore(INodeMemento memento)
+        {
+            if (memento is ElementNodeMemento)
+            {
+                var node = (LightElementNode)memento.GetState();
+                Tag = node.Tag;
+                children = node.children;
+                NodeType = node.NodeType;
+                ClosureType = node.ClosureType;
+                CssClasses = node.CssClasses;
+            }
+            else
+            {
+                throw new Exception("Unknown memento class");
+            }
         }
     }
 }

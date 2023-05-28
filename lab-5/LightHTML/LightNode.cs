@@ -1,4 +1,5 @@
-﻿using System;
+﻿using lab_5.LightHTML.Memento;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,5 +23,7 @@ namespace lab_5.LightHTML
         abstract public string InnerHTML();
         abstract public string OuterHTML();
         abstract public LightNode Clone();
+        abstract public INodeMemento Save();
+        abstract public void Restore(INodeMemento memento);
     }
 }
